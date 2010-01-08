@@ -19,7 +19,11 @@ else
 endif
 
 " require python or exit
-if !has('python') | call s:Log(0, "Error: scion requires vim compiled with +python") | finish | endif
+if !has('python')
+  let msg = "Python support required by scion-backend-vim !"
+  echoe msg | call s:Log(0, msg)
+  finish
+endif
 
 let g:vim_scion_protocol_version = "0"
 
