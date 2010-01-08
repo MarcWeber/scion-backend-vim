@@ -1,0 +1,9 @@
+{
+  "name" : "scion-backend-vim",
+  "version" : "0.0",
+  "author" : "Marc Weber and others (see history)",
+  "maintainer" : "Marc Weber <marco-oweber@gmx.de>",
+  "repository" : {"type": "git", "url": "git://github.com/MarcWeber/scion-backend-vim.git"},
+  "dependencies" : {},
+  "description" : "Scion backend (haskell type checking on buf write and more"
+}
