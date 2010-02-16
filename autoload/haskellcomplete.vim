@@ -368,7 +368,7 @@ def evalscion(str):
     try:
       server_connection.send(str)
     except:
-      vim.command('echom "%s"'% ("(re)connecting to scion"))
+      vim.command('echom "(re)connecting to scion"')
       connectscion()
       server_connection.send(str)
     return server_connection.receive()
