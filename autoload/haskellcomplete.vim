@@ -261,7 +261,7 @@ endfunction
 
 function! s:DefPython()
 python << PYTHONEOF
-import sys, tokenize, cStringIO, types, socket, string, vim, popen2, os
+import sys, tokenize, cStringIO, types, socket, string, vim, os
 from subprocess import Popen, PIPE
 
 scion_log_stdout = vim.eval('exists("g:scion_log_stdout") && g:scion_log_stdout')
