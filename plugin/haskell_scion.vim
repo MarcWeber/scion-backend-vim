@@ -25,7 +25,7 @@ fun! s:LoadComponentCompletion(A,L,P)
 endf
 
 fun! s:LoadComponentScion(...)
-  let result = haskellcomplete#LoadComponent(1,a:1)
+  let result = haskellcomplete#LoadComponent(1,a:000)
   echo haskellcomplete#ScionResultToErrorList('load component finished: ','setqflist', result)
 
   " start checking file on buf write

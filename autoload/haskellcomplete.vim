@@ -29,8 +29,10 @@ let g:vim_scion_protocol_version = "0"
 
 " prepare arguments for the load command
 fun! haskellcomplete#LoadArguments(component)
-  let dict = haskellcomplete#compToV(a:component)
-  let dict['cabal-file'] = haskellcomplete#CabalFile()
+  let dict = call('haskellcomplete#compToV', a:component)
+  if !has_key(dict, 'file')
+    let dict['cabal-file'] = haskellcomplete#CabalFile()
+  endif
   return {'component': dict}
 endf
 
