@@ -103,6 +103,53 @@ fun! haskellcomplete#ScionResultToErrorList(action, func, result)
 endfun
 
 
+fun! haskellcomplete#BackgroundTypecheckFile(...)
+  " no file given defaults to current buffer
+  let file = a:0 > 0 ? a:1 : expand('%:p')
+  return haskellcomplete#EvalScion(1, 'background-typecheck-file', {'file' : file})
+endf
+
+fun! haskellcomplete#BackgroundTypecheckResultOk(r)
+  if has_key(a:r,'Right')
+    return a:r['Right']
+  else
+    throw "BackgroundTypecheckFile failed:\n".a:r['Left']
+  endif
+endf
+
+fun! haskellcomplete#BackgroundTypecheckFileSetQFList(...)
+  let r = call(function('haskellcomplete#BackgroundTypecheckFile'), a:000)
+  try
+    echo haskellcomplete#ScionResultToErrorList('file check', 'setqflist'
+          \ , haskellcomplete#BackgroundTypecheckResultOk(r))
+  catch /.*/
+    echoe v:exception
+    call setqflist([{'text' : v:exception}])
+  endtry
+  cope
+endf
+
+" This runs BackgroundTypecheckFile (background-typecheck-file) once
+" This is required by at least ThingAtPointScion and DumpSourcesScion
+fun! haskellcomplete#EnsureTypeFileTypechecks(...)
+  let r = call(function('haskellcomplete#BackgroundTypecheckFile'), a:000)
+  " if list doesn't contain errors (eg warnings only) proceed. Raise exception
+  " otherwise
+  for note in haskellcomplete#BackgroundTypecheckResultOk(r)['notes']
+    if note['kind'] == 'error' | throw "type check errors. Run BackgroundTypecheckFile or write buffer to do so" | endif
+  endfor
+endf
+
+fun! haskellcomplete#ThingAtPoint()
+  call haskellcomplete#EnsureTypeFileTypechecks()
+  return haskellcomplete#EvalScion(1,'thing-at-point', {'file' : expand('%:p'), 'line' : 1*line('.'), 'column' : 1*col('.')})
+endf
+
+fun! haskellcomplete#DumpDefinedNamesScion()
+  call haskellcomplete#EnsureTypeFileTypechecks()
+  return haskellcomplete#EvalScion(1,'dump-defined-names',{})
+endf
+
 " if there is item take it, if there are more than one ask user which one to
 " use.. -- don't think cabal allows multiple .cabal files.. At least the user
 " is notified that there are more than one .cabal files

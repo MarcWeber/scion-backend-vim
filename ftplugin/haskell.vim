@@ -12,21 +12,6 @@ endif
 " I'll implement a better interface in tovl.
 " (http://github.com/MarcWeber/theonevimlib)
 
-fun! s:BackgroundTypecheckFile(...)
-  " no file given defaults to current buffer
-  let file = a:0 > 0 ? a:1 : expand('%:p')
-  let r = haskellcomplete#EvalScion(1, 'background-typecheck-file', {'file' : file})
-  if has_key(r,'Right')
-    echo haskellcomplete#ScionResultToErrorList('file check', 'setqflist', r['Right'])
-  else
-    call setqflist([{'text' : r['Left']}])
-    cope
-    " isn't shown because silent is used below.. and silent is used so that
-    " <cr> need not to be pressed over and over again
-    echo "this file could not be checked, reason: ".r['Left']."(-> backgroundTypecheckFile)"
-  endif
-endf
-
 fun! s:FlagCompletion(A,L,P)
   let beforeC= a:L[:a:P-1]
   let word = matchstr(beforeC, '\zs\S*$')
@@ -91,7 +76,7 @@ command! -nargs=0 CurrentComponentScion
 "  \ echo haskellcomplete#EvalScion(1,'current-cabal-file',{})
 
 command! -nargs=0 DumpDefinedNamesScion
-  \ echo haskellcomplete#EvalScion(1,'dump-defined-names',{})
+  \ echo haskellcomplete#DumpDefinedNamesScion()
 
 command! -nargs=0 DefinedNamesScion
   \ echo haskellcomplete#EvalScion(1,'defined-names',{})
@@ -100,7 +85,7 @@ command! -nargs=1 NameDefinitionsScion
   \ echo haskellcomplete#EvalScion(1,'name-definitions',{'name' : <f-args>})
 
 command! -buffer -nargs=* -complete=file BackgroundTypecheckFileScion
-  \ call s:BackgroundTypecheckFile(<f-args>)
+  \ call haskellcomplete#BackgroundTypecheckFileSetQFList(<f-args>)
 
 command! -nargs=0 ForceUnloadScion
   \ echo haskellcomplete#EvalScion(1,'force-unload',{})
@@ -121,4 +106,4 @@ command! -buffer -nargs=* -complete=file ConfigureCabalProjectScion
   \ echo haskellcomplete#OpenCabalProject('configure-cabal-project', <f-args>)
 
 command! -buffer ThingAtPointScion
-  \ echo haskellcomplete#EvalScion(1,'thing-at-point', {'file' : expand('%:p'), 'line' : 1*line('.'), 'column' : 1*col('.')})
+  \ echo haskellcomplete#ThingAtPoint()
