@@ -283,7 +283,7 @@ class ScionServerConnection:
   def receive(self):
     s = self.scion_o.readline()
     if s == "":
-      raise "EOF, stderr lines: \n%s"%self.scion_err.read()
+      raise Exception("EOF, stderr lines: \n%s"%self.scion_err.read())
     else:
       return s[:-1]
 
