@@ -367,13 +367,17 @@ def connectscion():
 # sends a command and returns the returned line
 def evalscion(str):
     global server_connection
-    try:
+
+    def send_and_receive():
       server_connection.send(str)
+      return server_connection.receive()
+
+    try:
+      return send_and_receive()
     except:
       vim.command('echom "(re)connecting to scion"')
       connectscion()
-      server_connection.send(str)
-    return server_connection.receive()
+      return send_and_receive()
 
 # str see EvalScion
 def evalscionAssign(str):
