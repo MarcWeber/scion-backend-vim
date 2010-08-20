@@ -317,7 +317,7 @@ endfunction
 function! s:DefPython()
 python << PYTHONEOF
 import sys, tokenize, cStringIO, types, socket, string, vim, os
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
 
 scion_log_stdout = vim.eval('exists("g:scion_log_stdout") && g:scion_log_stdout')
 scion_stdout = []
@@ -339,7 +339,7 @@ class ScionServerConnectionStdinOut(ScionServerConnection):
   def __init__(self, scion_executable):
     #self.scion_o,self.scion_i,e = popen2.popen3('%s -i -f /tmp/scion-log-%s' % (scion_executable, os.getcwd().replace('/','_').replace('\\','_'))
     p = Popen([scion_executable,"-i","-f", "/tmp/scion-log-%s"%(os.getcwd().replace('/','_').replace('\\','_'))], \
-            shell = False, bufsize = 1, stdin = PIPE, stdout = PIPE, stderr = PIPE)
+            shell = False, bufsize = 1, stdin = PIPE, stdout = PIPE, stderr = STDOUT)
     self.scion_o = p.stdout
     self.scion_i = p.stdin
     self.scion_err = p.stderr
