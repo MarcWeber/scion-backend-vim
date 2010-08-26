@@ -26,6 +26,13 @@ if !has('python')
 endif
 
 let g:vim_scion_protocol_version = "0"
+if !exists('g:scion_tmp_dir')
+  if has('win32') || has('win64')
+    let g:scion_tmp_dir = expand('<sfile>:h:h')
+  else
+    let g:scion_tmp_dir = "/tmp"
+  endif
+endif
 
 " prepare arguments for the load command
 fun! haskellcomplete#LoadArguments(component)
@@ -338,7 +345,7 @@ class ScionServerConnectionStdinOut(ScionServerConnection):
   """this connection launches the server and connects to its stdin and stdout streams"""
   def __init__(self, scion_executable):
     #self.scion_o,self.scion_i,e = popen2.popen3('%s -i -f /tmp/scion-log-%s' % (scion_executable, os.getcwd().replace('/','_').replace('\\','_'))
-    p = Popen([scion_executable,"-i","-f", "/tmp/scion-log-%s"%(os.getcwd().replace('/','_').replace('\\','_'))], \
+    p = Popen([scion_executable,"-i","-f", "%s/scion-log-%s"%(vim.eval("g:scion_tmp_dir"), os.getcwd().replace('/','_').replace('\\','_'))], \
             shell = False, bufsize = 1, stdin = PIPE, stdout = PIPE, stderr = STDOUT)
     self.scion_o = p.stdout
     self.scion_i = p.stdin

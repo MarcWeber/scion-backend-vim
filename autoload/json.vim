@@ -17,7 +17,7 @@ endf
 
 fun! json#Encode(thing)
   if type(a:thing) == type("")
-    return '"'.escape(a:thing,'"').'"'
+    return '"'.escape(a:thing,'"\').'"'
   elseif type(a:thing) == type({})
     let pairs = []
     for [Key, Value] in items(a:thing)
