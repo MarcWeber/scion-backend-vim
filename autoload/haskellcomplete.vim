@@ -37,10 +37,12 @@ endif
 " prepare arguments for the load command
 fun! haskellcomplete#LoadArguments(component)
   let dict = call('haskellcomplete#compToV', a:component)
+  let o = get(dict,'output',0)
+  silent! unlet dict['output']
   if !has_key(dict, 'file')
     let dict['cabal-file'] = haskellcomplete#CabalFile()
   endif
-  return {'component': dict}
+  return {'component': dict, 'output': json#IntToBool(o)}
 endf
 
 " component one of
@@ -48,6 +50,7 @@ endf
 " library          < cabal library
 " file             < file without cabal project
 fun! haskellcomplete#LoadComponent(set_cabal_project, component)
+  let output = a:0 > 0 ? a:1 : 0
   let result = haskellcomplete#EvalScion(0, 'load', haskellcomplete#LoadArguments(a:component))
   if has_key(result,'error')
     if result['error']['message'] == "NoCurrentCabalProject" && a:set_cabal_project
@@ -61,15 +64,19 @@ fun! haskellcomplete#LoadComponent(set_cabal_project, component)
 endf
 
 fun! haskellcomplete#SetCurrentCabalProject()
+  " FIXME
+  " How to tell Scion now which target to build?
+  " Does it always build all ?
+  echom "this function is probably no longer valid!"
   let configs = haskellcomplete#EvalScion(1,'list-cabal-configurations',
     \ { 'cabal-file' : haskellcomplete#CabalFile()
     \ , 'scion-default': json#IntToBool(get(g:scion_config, "use_default_scion_cabal_dist_dir", 1)) })
-  let config = haskellcomplete#ChooseFromList(configs, 'select a cabal configuration')
-  let result = haskellcomplete#EvalScion(1,'open-cabal-project'
-              \  ,{'root-dir' : getcwd()
-              \   ,'dist-dir' : config['dist-dir']
-              \   ,'extra-args' : config['extra-args'] }
-              \ )
+  " let config = haskellcomplete#ChooseFromList(configs, 'select a cabal configuration')
+  " let result = haskellcomplete#EvalScion(1,'open-cabal-project'
+              " \  ,{'root-dir' : getcwd()
+              " \   ,'dist-dir' : config['dist-dir']
+              " \   ,'extra-args' : config['extra-args'] }
+              " \ )
 endf
 
 fun! haskellcomplete#ScionResultToErrorList(action, func, result)
@@ -202,17 +209,25 @@ fun! haskellcomplete#OpenCabalProject(method, ...)
     \ )
 endf
 
-" split executable:name
-"   or  library
+" split executable:name[:output]
+"   or  library[:output]
 " and return dictionary
 fun! haskellcomplete#compToV(...)
   let component = a:0 > 0 ? a:1 : 'file:'.expand('%:p')
+  let c = ":output"
+  if component[-len(c):-1] == ":output"
+    let output = 1
+    let component = component[0:-len(c)-1]
+  else
+    let output = 0
+  endif
+
   let m = matchstr(component, '^executable:\zs.*')
-  if m != '' | return {'executable' : m} | endif
+  if m != '' | return {'executable' : m, 'output': output} | endif
   let m = matchstr(component, '^library$')
-  if m != '' | return {'library' : json#NULL()} | endif
+  if m != '' | return {'library' : json#NULL(), 'output': output} | endif
   let m = matchstr(component, '^file:\zs.*')
-  if m != '' | return {'file' : m} | endif
+  if m != '' | return {'file' : m, 'output': output} | endif
   throw "invalid component".component
 endfun
 

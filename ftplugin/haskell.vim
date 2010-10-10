@@ -96,14 +96,19 @@ command! -nargs=0 DumpSourcesScion
 command! -nargs=1 -complete=customlist,s:FlagCompletion -buffer AddCommandLineFlagScion
   \ echo haskellcomplete#EvalScion(1,'add-command-line-flag',{'flags': [<f-args>]})
 
+command! -nargs=0 -buffer IdentifyScion
+  \ echo haskellcomplete#EvalScion(1,'client-identify',{})
+
+" for debugging:
+command! -nargs=0 -buffer DumpModuleGraph
+  \ echo haskellcomplete#EvalScion(1,'dump-module-graph',{})
+
 " ===== loading a cabal project: ============================
 
 " assuming pwd is current cabal directory containing the .cabal file 
 " optional argument specifies the cabal build (dist) directory
 command! -buffer -nargs=* -complete=file OpenCabalProjectScion
   \ echo haskellcomplete#OpenCabalProject('open-cabal-project',<f-args>)
-command! -buffer -nargs=* -complete=file ConfigureCabalProjectScion
-  \ echo haskellcomplete#OpenCabalProject('configure-cabal-project', <f-args>)
 
 command! -buffer ThingAtPointScion
   \ echo haskellcomplete#ThingAtPoint()

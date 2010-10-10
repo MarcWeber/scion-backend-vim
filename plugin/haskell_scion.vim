@@ -49,5 +49,17 @@ command! -nargs=* -complete=file WriteSampleConfigScion
 command! -nargs=0 DumpNameDBScion
   \ echo haskellcomplete#EvalScion(1, 'dump-name-db', {})
 
-command! -nargs=0 DumpModuleGraphScion
+" use this output for completion (TODO)?
+command! -nargs=0 -buffer TopLevelNamesScion
+  \ echo haskellcomplete#EvalScion(1, 'top-level-names', {})
+
+" use this output for novigation (TODO)?
+command! -nargs=0 -buffer OutlineScion
+  \ echo haskellcomplete#EvalScion(1, 'outline', {})
+" merge commands add optional arg? I'm too lazy
+command! -nargs=0 -buffer OutlineNoTrimScion
+  \ echo haskellcomplete#EvalScion(1, 'outline', {'trimFile': json#False()})
+
+" for debugging:
+command! -nargs=0 -buffer DumpModuleGraph
   \ echo haskellcomplete#EvalScion(1, 'dump-module-graph', {})
