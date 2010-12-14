@@ -4,6 +4,8 @@
   "author" : "Marc Weber and others (see history)",
   "maintainer" : "Marc Weber <marco-oweber@gmx.de>",
   "repository" : {"type": "git", "url": "git://github.com/MarcWeber/scion-backend-vim.git"},
-  "dependencies" : {},
+  "dependencies" : {
+    "vim-addon-json-encoding": {},
+  },
   "description" : "Scion backend (haskell type checking on buf write and more"
 }

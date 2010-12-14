@@ -63,9 +63,6 @@ command! -nargs=* ListCabalConfigurationsScion
 command! -nargs=1 SetGHCVerbosityScion
   \ echo haskellcomplete#EvalScion(1,'set-ghc-verbosity',{'level': 1*<f-args>})
 
-command! -nargs=1 SetVerbosityScion
-  \ echo haskellcomplete#EvalScion(1,'set-verbosity',{'level': 1*<f-args>})
-
 command! -nargs=0 GetVerbosityScion
   \ echo haskellcomplete#EvalScion(1,'get-verbosity',{})
 

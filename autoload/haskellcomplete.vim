@@ -63,7 +63,7 @@ endf
 fun! haskellcomplete#SetCurrentCabalProject()
   let configs = haskellcomplete#EvalScion(1,'list-cabal-configurations',
     \ { 'cabal-file' : haskellcomplete#CabalFile()
-    \ , 'scion-default': json#IntToBool(get(g:scion_config, "use_default_scion_cabal_dist_dir", 1)) })
+    \ , 'scion-default': json_encoding#IntToBool(get(g:scion_config, "use_default_scion_cabal_dist_dir", 1)) })
   let config = haskellcomplete#ChooseFromList(configs, 'select a cabal configuration')
   let result = haskellcomplete#EvalScion(1,'open-cabal-project'
               \  ,{'root-dir' : getcwd()
@@ -210,7 +210,7 @@ fun! haskellcomplete#compToV(...)
   let m = matchstr(component, '^executable:\zs.*')
   if m != '' | return {'executable' : m} | endif
   let m = matchstr(component, '^library$')
-  if m != '' | return {'library' : json#NULL()} | endif
+  if m != '' | return {'library' : json_encoding#NULL()} | endif
   let m = matchstr(component, '^file:\zs.*')
   if m != '' | return {'file' : m} | endif
   throw "invalid component".component
@@ -301,7 +301,7 @@ function! haskellcomplete#EvalScion(fail_on_error, method, params, ...)
   let request = { 'method' : a:method, 'params' : a:params, 'id' : g:scion_request_id }
   " the first string converts the vim object into a string, the second
   " converts this string into a python string
-  let g:scion_arg = json#Encode(request)
+  let g:scion_arg = json_encoding#Encode(request)
   py evalscionAssign(vim.eval('g:scion_arg'))
   " warnings
   for w in get(g:scion_result, 'warnings', [])

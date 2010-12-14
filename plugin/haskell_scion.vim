@@ -51,3 +51,6 @@ command! -nargs=0 DumpNameDBScion
 
 command! -nargs=0 DumpModuleGraphScion
   \ echo haskellcomplete#EvalScion(1, 'dump-module-graph', {})
+
+command! -nargs=1 SetVerbosityScion
+  \ echo haskellcomplete#EvalScion(1,'set-verbosity',{'level': 1*<f-args>})
