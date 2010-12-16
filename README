@@ -29,7 +29,7 @@ Copy paste the following lines into your `~/.vimrc`
 
     " make vim load the plugin/haskell_scion.vim,
     " make it know about ftplugin/haskell.vim, autoload/* files
-    exec 'set runtimepath+='.expand("~/path/scion-<version>/vim_runtime_path/")
+    exec 'set runtimepath+='.expand("~/path-to-this-repo")
 
     " this makes vim actually load the ftplugin file
     " As vim user you should already have this in your .vimrc
