@@ -5,7 +5,7 @@ endif
 " r = scion result with error locations
 " func : either setqflist or setloclist
 if !exists('g:haskell_qf_hook')
-  let g:haskell_qf_hook = 'call haskellcomplete#SaneHook()'
+  let g:haskell_qf_hook = 'call scion#SaneHook()'
 endif
 
 " very simple user interface to expose scion functionality

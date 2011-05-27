@@ -1,6 +1,12 @@
 scion-backend-vim
 =================
 
+IMPORTANT:
+  The current branch has been started to adopt the current code to the new
+  multiple workers architecture of scion. See scion branch scion-2nd-attempt docs/*
+  
+  If you need to know the current state of the update contact me (see bottom of file).
+
 This is the vim backend belonging to the http://github.com/MarcWeber/nominolo/scion project.
 
 The vim files have been put into a separate repository because Thomas Schilling can't support it.
