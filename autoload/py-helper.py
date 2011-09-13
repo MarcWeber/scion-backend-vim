@@ -59,17 +59,21 @@ class ScionThreadLogToFile ( threading.Thread ):
     threading.Thread.__init__(self)
     self.file = open(file, 'w')
     self.stdout = stdout
+    self.done = False
 
   def run (self):
     # don't try to callback into vim within this thread
     # it would crash Vim!
-    while True:
+    while not self.done:
       s = self.stdout.readline()
       if s != "":
         self.file.write(s)
         self.file.write("\n")
         self.file.flush()
       time.sleep(1)
+
+  def stop (self):
+      self.done = True
 
 class ScionServer:
   def __init__(self, scionserver_path, scion_server_log_prefix):
@@ -123,6 +127,8 @@ class ScionServer:
     if self.process != False:
       self.process.kill()
       self.process.wait()
+
+    self.logging_thread.stop()
     # TODO: this will close stdout thus cause error in thread which should stop then. This cane be done more gracefully
 
   def send_receive(self, s):
