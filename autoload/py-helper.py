@@ -122,6 +122,7 @@ class ScionServer:
 
     if self.process != False:
       self.process.kill()
+      self.process.wait()
     # TODO: this will close stdout thus cause error in thread which should stop then. This cane be done more gracefully
 
   def send_receive(self, s):
