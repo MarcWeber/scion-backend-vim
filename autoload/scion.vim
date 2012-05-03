@@ -76,9 +76,9 @@ fun! scion#CreateSession() abort
   " TODO add non cabal builds?
   let config = configs[i-1]
   let reply =  scion#Request({"CreateSession":[config]}).RSessionCreated
-  let s:c.sessions.last = reply[0]
-  let s:c.sessions[reply[0]] = {'ModuleSummary': map(reply[3],'v:val.ModuleSummary')}
-  call scion#PopulateQF(reply[1], reply[2])
+  let s:c.sessions.last = reply[1]
+  let s:c.sessions[s:c.sessions.last] = {'ModuleSummary': map(reply[4],'v:val.ModuleSummary')}
+  call scion#PopulateQF(reply[2], reply[3])
 endf
 
 fun! scion#ScionResultToErrorList(func, list) abort
